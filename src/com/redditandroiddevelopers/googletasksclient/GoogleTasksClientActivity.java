@@ -1,4 +1,4 @@
-package com.rad.googletasksclient;
+package com.redditandroiddevelopers.googletasksclient;
 
 import android.app.Activity;
 import android.os.Bundle;
