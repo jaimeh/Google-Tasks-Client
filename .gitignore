@@ -1,4 +1,5 @@
-.classpath
+# Maven directory
+target/
 
 # built application files
 *.apk
@@ -13,7 +14,26 @@
 # generated files
 bin/
 gen/
-
 # Local configuration file (sdk path, etc)
 local.properties
 /.checkstyle
+
+# Eclipse ignore
+.project
+.metadata
+tmp/
+*.tmp
+*.bak
+*.swp
+.classpath
+.settings/
+.loadpath
+
+# External tool builders
+.externalToolBuilders/
+
+# Locally stored "Eclipse launch configurations"
+*.launch
+
+# CDT-specific
+.cproject
