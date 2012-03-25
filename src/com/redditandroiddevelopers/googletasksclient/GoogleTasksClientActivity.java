@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.joda.time.DateTime;
+
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.extensions.android2.auth.GoogleAccountManager;
@@ -22,6 +24,7 @@ import com.google.api.client.http.json.JsonHttpRequestInitializer;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.tasks.Tasks;
+import com.google.api.services.tasks.Tasks.TasksOperations.Insert;
 import com.google.api.services.tasks.TasksRequest;
 import com.google.api.services.tasks.model.Task;
 
@@ -39,6 +42,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -53,6 +57,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuInflater;
 
 import com.redditandroiddevelopers.googletasksclient.ClientCredentials;
+
 
 
 public class GoogleTasksClientActivity extends SherlockActivity {
@@ -90,7 +95,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 	  com.google.api.services.tasks.Tasks service;
 	
 	  List<String> taskTitles = new ArrayList<String>();
-	  
+	 
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
@@ -99,10 +104,8 @@ public class GoogleTasksClientActivity extends SherlockActivity {
         menu.add(0,0,0,"Add New Task"); 
         menu.add(0,1,0,"Search"); 
         menu.add(0,2,0,"Settings");    
-
-       
-
-         
+        menu.add(0,3,0,"Refresh"); 
+        
         return true;
     }
 	
@@ -112,8 +115,8 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 
 	    long totalSize = 0;
 	  
-	    ListView listView = (ListView) findViewById(R.id.mylist);
 	    
+	    ListView listView = (ListView) findViewById(R.id.mylist);
 	    protected GoogleTasksClientActivity doInBackground(String... urls) {
 
 		    try {
@@ -145,18 +148,57 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 	    }
 	 }
 
-	
+	class addTask extends AsyncTask<String, Void, GoogleTasksClientActivity> {
+
+	   
+		
+	    protected GoogleTasksClientActivity doInBackground(String... urls) {
+
+	    	Task task = new Task();
+      		task.setTitle("New Task");
+      		task.setNotes("Please complete me");
+      		
+      		
+      		try {
+      				Task result = service.tasks().insert("@default", task).execute();
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			//refresh
+			
+			new RetreiveTask().execute();
+		    return null;
+			
+			
+	    }
+
+
+		protected void onPostExecute(GoogleTasksClientActivity feed) {
+			
+			
+			
+	    }
+	 }
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
 		 
+		
 		switch(item.getItemId())
         {
             case 0:
             {
-          	Toast.makeText(this, "Add selected",
-    	              Toast.LENGTH_SHORT).show();
+          	
+          
+         // 	task.setDue(new DateTime(System.currentTimeMillis() + 3600000), 0);
+          	//new addTask().execute();
+                Intent myIntent = new Intent(GoogleTasksClientActivity.this, AddTaskActivity.class);
+                GoogleTasksClientActivity.this.startActivity(myIntent);
+                //System.out.println(result.get);
            	return true;
             }
             case 1:
@@ -171,6 +213,13 @@ public class GoogleTasksClientActivity extends SherlockActivity {
     	             Toast.LENGTH_SHORT).show();
            	return true;
             }
+            case 3:
+            {
+           Toast.makeText(this, "refreshing task list",
+                     Toast.LENGTH_SHORT).show();
+           refresh();
+            return true;
+            }
             default:
         		return super.onOptionsItemSelected(item);
         }
@@ -181,8 +230,10 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 	 @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
 
-        getSupportActionBar().setTitle("Reddit Google Tasks");
+       
 
         setContentView(R.layout.main);
      
@@ -199,7 +250,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
         })
         .build();
     	
-    	  settings = getPreferences(MODE_PRIVATE);
+    	  //settings = getPreferences(MODE_PRIVATE);
 
     	  accountName = settings.getString(PREF_ACCOUNT_NAME, null);
             credential.setAccessToken(settings.getString(PREF_AUTH_TOKEN, null));
@@ -210,6 +261,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
       
         
     }
+
 	  void setAuthToken(String authToken) {
 		    SharedPreferences.Editor editor = settings.edit();
 		    editor.putString(PREF_AUTH_TOKEN, authToken);
@@ -303,4 +355,17 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		    Log.e(TAG, e.getMessage(), e);
 		  }
     
+	  //refresh method, temporary fix
+	    public void refresh() {
+	        
+	        Intent intent = getIntent();
+	        overridePendingTransition(0, 0);
+	        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+	        finish();
+
+	        overridePendingTransition(0, 0);
+	        startActivity(intent);
+	    }
+	    
+	    
 }
