@@ -1,6 +1,6 @@
 package com.redditandroiddevelopers.googletasksclient;
 
-import android.content.Intent;
+
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,11 +9,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.preference.PreferenceManager;
 
-import com.actionbarsherlock.app.ActionBar;
+
 import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.view.MenuInflater;
+
 
 
 
@@ -25,13 +25,12 @@ import com.google.api.client.http.json.JsonHttpRequest;
 import com.google.api.client.http.json.JsonHttpRequestInitializer;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.services.tasks.Tasks;
-import com.google.api.services.tasks.Tasks.TasksOperations.Insert;
+
 import com.google.api.services.tasks.TasksRequest;
 import com.google.api.services.tasks.model.Task;
 
 import java.io.IOException;
-import java.util.Map;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,11 +43,6 @@ public class AddTaskActivity extends SherlockActivity{
 
     // This must be the exact string, and is a special for alias OAuth 2 scope
     // "https://www.googleapis.com/auth/tasks"
-    private static final String AUTH_TOKEN_TYPE = "Manage your tasks";
-
-    private static final int MENU_ACCOUNTS = 0;
-
-    private static final int REQUEST_AUTHENTICATE = 0;
 
     final HttpTransport transport = AndroidHttp.newCompatibleTransport();
     
@@ -85,31 +79,23 @@ public class AddTaskActivity extends SherlockActivity{
           public void initialize(JsonHttpRequest request) throws IOException {
             TasksRequest tasksRequest = (TasksRequest) request;
             tasksRequest.setKey(ClientCredentials.KEY);
-            
           }
         })
         .build();
         
-         // settings = getPreferences(MODE_PRIVATE);
-          
-       
-         
-          
+
+          //get the accountName and authToken from sharedPreferences settings
           String PREF_ACCOUNT_NAME = settings.getString("accountName", null);
           String PREF_AUTH_TOKEN = settings.getString("authToken", null);
          
           Log.v(TAG, "PREF_ACCOUNT_NAME =" + PREF_ACCOUNT_NAME);
           Log.v(TAG, "PREF_AUTH_TOKEN =" + PREF_AUTH_TOKEN);
           
-          Map<String,?> prefsMap = settings.getAll();
-
-          for(Map.Entry<String,?> entry : prefsMap.entrySet())
-          {
-              Log.v("SharedPreferences", entry.getKey() + ":" + entry.getValue().toString());         
-          }
+       
           
             accountName = PREF_ACCOUNT_NAME;
             credential.setAccessToken(PREF_AUTH_TOKEN);
+            
              Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
            
              accountManager = new GoogleAccountManager(getApplicationContext());
@@ -159,6 +145,7 @@ public class AddTaskActivity extends SherlockActivity{
         }
         
     }
+    //add task module
  class addTask extends AsyncTask<String, Void, AddTaskActivity> {
 
        
@@ -172,8 +159,7 @@ public class AddTaskActivity extends SherlockActivity{
             task.setTitle(titleText.getText().toString());
             task.setNotes(noteText.getText().toString());
             
-            Log.v(TAG, "Title TEXT =" + titleText.getText().toString());
-            Log.v(TAG, "note TEXT =" + noteText.getText().toString());
+
             
             try {
                 Task result = service.tasks().insert("@default", task).execute();
@@ -182,7 +168,7 @@ public class AddTaskActivity extends SherlockActivity{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            
+            //close addTask Activity
             finish();
             return null;
             
@@ -190,12 +176,6 @@ public class AddTaskActivity extends SherlockActivity{
         }
 
 
-        protected void onPostExecute(GoogleTasksClientActivity feed) {
-            
-           
-            
-         
-            
-        }
+      
      }
 }

@@ -110,11 +110,8 @@ public class GoogleTasksClientActivity extends SherlockActivity {
     }
 	
 	
-	
+	//to Download All List and add items to listview.
 	class RetreiveTask extends AsyncTask<String, Void, GoogleTasksClientActivity> {
-
-	    long totalSize = 0;
-	  
 	    
 	    ListView listView = (ListView) findViewById(R.id.mylist);
 	    protected GoogleTasksClientActivity doInBackground(String... urls) {
@@ -148,40 +145,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 	    }
 	 }
 
-	class addTask extends AsyncTask<String, Void, GoogleTasksClientActivity> {
 
-	   
-		
-	    protected GoogleTasksClientActivity doInBackground(String... urls) {
-
-	    	Task task = new Task();
-      		task.setTitle("New Task");
-      		task.setNotes("Please complete me");
-      		
-      		
-      		try {
-      				Task result = service.tasks().insert("@default", task).execute();
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			//refresh
-			
-			new RetreiveTask().execute();
-		    return null;
-			
-			
-	    }
-
-
-		protected void onPostExecute(GoogleTasksClientActivity feed) {
-			
-			
-			
-	    }
-	 }
 	
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
@@ -192,13 +156,10 @@ public class GoogleTasksClientActivity extends SherlockActivity {
         {
             case 0:
             {
-          	
-          
-         // 	task.setDue(new DateTime(System.currentTimeMillis() + 3600000), 0);
-          	//new addTask().execute();
+                //Open AddTaskActivity to add new task.
                 Intent myIntent = new Intent(GoogleTasksClientActivity.this, AddTaskActivity.class);
                 GoogleTasksClientActivity.this.startActivity(myIntent);
-                //System.out.println(result.get);
+    
            	return true;
             }
             case 1:
@@ -261,7 +222,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
       
         
     }
-
+	//Put oauthToken on sharedPreferences
 	  void setAuthToken(String authToken) {
 		    SharedPreferences.Editor editor = settings.edit();
 		    editor.putString(PREF_AUTH_TOKEN, authToken);
@@ -276,7 +237,8 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		      return;
 		    }
 		    if (credential.getAccessToken() != null) {
-		      onAuthToken();
+		      //download task list
+		        new RetreiveTask().execute();
 		      return;
 		    }
 		    accountManager.manager.getAuthToken(
@@ -291,7 +253,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		                startActivityForResult(intent, REQUEST_AUTHENTICATE);
 		              } else if (bundle.containsKey(AccountManager.KEY_AUTHTOKEN)) {
 		                setAuthToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
-		                onAuthToken();
+		                new RetreiveTask().execute();
 		              }
 		            } catch (Exception e) {
 		              Log.e(TAG, e.getMessage(), e);
@@ -315,7 +277,8 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		              bundle = future.getResult();
 		              setAccountName(bundle.getString(AccountManager.KEY_ACCOUNT_NAME));
 		              setAuthToken(bundle.getString(AccountManager.KEY_AUTHTOKEN));
-		              onAuthToken();
+		              //download task list
+		              new RetreiveTask().execute();
 		            } catch (OperationCanceledException e) {
 		              // user canceled
 		            } catch (AuthenticatorException e) {
@@ -327,16 +290,15 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		        },
 		        null);
 		  }
+	 //Put account name on sharedPreferences
 	 void setAccountName(String accountName) {
 		    SharedPreferences.Editor editor = settings.edit();
 		    editor.putString(PREF_ACCOUNT_NAME, accountName);
 		    editor.commit();
 		    this.accountName = accountName;
 		  }
-	  void onAuthToken() {
-		 
-		  new RetreiveTask().execute();
-		  }
+	
+
 
 	  void handleGoogleException(IOException e) {
 		    if (e instanceof GoogleJsonResponseException) {
@@ -355,7 +317,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		    Log.e(TAG, e.getMessage(), e);
 		  }
     
-	  //refresh method, temporary fix
+	  //Currently to refresh listView, we need to restart the main activity. this will be temporary fix. ||rheza
 	    public void refresh() {
 	        
 	        Intent intent = getIntent();
