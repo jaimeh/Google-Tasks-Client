@@ -37,3 +37,6 @@ tmp/
 
 # CDT-specific
 .cproject
+
+#ignore dsstore
+.DS_Store

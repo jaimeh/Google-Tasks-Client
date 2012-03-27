@@ -11,81 +11,86 @@
 		<repository>
 			<id>google-api-services</id>
 			<url>http://mavenrepo.google-api-java-client.googlecode.com/hg</url>
-			</repository>
+		</repository>
+		<repository>
+			<id>jakewharton</id>
+			<url>http://r.jakewharton.com/maven/release/</url>
+		</repository>
 	</repositories>
-
-	<dependencyManagement>
 		<dependencies>
-		    <!-- Android -->
-			<dependency>
-				<groupId>com.google.android</groupId>
-				<artifactId>android</artifactId>
-				<version>2.2.1</version>
-				<scope>provided</scope>
+		    <!-- actionbarsherlock -->
+			<dependency> 
+				<groupId>com.actionbarsherlock</groupId> 
+				<artifactId>library</artifactId> 
+				<version>4.0.0</version> 
+				<type>apklib</type> 
 			</dependency>
-			
-			<!-- google-http-java-client -->
-			<dependency>
-				<groupId>com.google.http-client</groupId>
-				<artifactId>google-http-client-android2</artifactId>
-				<version>1.7.0-beta</version>
-				<exclusions>
-				<exclusion>
-					<artifactId>xpp3</artifactId>
-					<groupId>xpp3</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>httpclient</artifactId>
-					<groupId>org.apache.httpcomponents</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>junit</artifactId>
-					<groupId>junit</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>android</artifactId>
-					<groupId>com.google.android</groupId>
-				</exclusion>
-				</exclusions>
-			 </dependency>
-			
-			<!-- google-api-java-client -->
-			<dependency>
-				<groupId>com.google.api-client</groupId>
-				<artifactId>google-api-client</artifactId>
-				<version>1.7.0-beta</version>
-				<exclusions>
-					<exclusion>
-						<artifactId>xpp3</artifactId>
-						<groupId>xpp3</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>httpclient</artifactId>
-						<groupId>org.apache.httpcomponents</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>junit</artifactId>
-						<groupId>junit</groupId>
-					</exclusion>
-					<exclusion>
-						<artifactId>android</artifactId>
-						<groupId>com.google.android</groupId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			
-			<!-- google-api-services-tasks -->
-			<dependency>
-				<groupId>com.google.apis</groupId>
-				<artifactId>google-api-services-tasks</artifactId>
-				<version>v1-rev2-1.4.0-beta</version>
-				<exclusions>
-					<exclusion>
-						<artifactId>junit</artifactId>
-						<groupId>junit</groupId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+<dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client-android2</artifactId>
+      <version>1.7.0-beta</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xpp3</artifactId>
+          <groupId>xpp3</groupId>
+        </exclusion>
+        
+        <exclusion>
+          <artifactId>httpclient</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+        
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>android</artifactId>
+          <groupId>com.google.android</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.api-client</groupId>
+      <artifactId>google-api-client-android2</artifactId>
+      <version>1.7.0-beta</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xpp3</artifactId>
+          <groupId>xpp3</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-logging</artifactId>
+          <groupId>commons-logging</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>httpcore</artifactId>
+          <groupId>org.apache.httpcomponents</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>xmlParserAPIs</artifactId>
+          <groupId>xerces</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>android</artifactId>
+          <groupId>com.google.android</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-tasks</artifactId>
+      <version>v1-rev2-1.4.0-beta</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
 </project>

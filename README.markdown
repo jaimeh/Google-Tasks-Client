@@ -3,7 +3,6 @@ Google Tasks Client:
 
 - The Google Tasks Client will be using OAuth, so you'll need to contact a PM for access to the API Key.
 - GTC will be using the Google Tasks API to deal with the transfer of data. Go read up at: https://developers.google.com/google-apps/tasks/
-- <strike>As we haven't yet integrated Maven (in the 'Features' ticket tracker), you'll need to install the dependencies manually.</strike>
 
 ------------------
 
@@ -21,13 +20,14 @@ Navigate to location of google-tasks-client directory:
 
 ------------------
 
-Installing the dependencies manually:
+Installing the ActionBarSherlock dependencies manually:
 ==================
 <ol>
-  <li>Download <a href="http://google-api-java-client.googlecode.com/files/google-api-java-client-1.7.0-beta.zip">google-api-java-client</a></li>
-  <li>Download <a href="http://mavenrepo.google-api-java-client.googlecode.com/hg/com/google/apis/google-api-services-tasks/v1-rev2-1.4.0-beta/google-api-services-tasks-v1-rev2-1.4.0-beta.zip">google-api-services-tasks</a></li>
+  <li>Download <a href="https://github.com/JakeWharton/ActionBarSherlock/zipball/4.0.0">ActionBarSherlock</a></li>
   <li>Unzip</li>
-  <li>In Eclipse: 'Right-click on the project > Build path > Add External Archives...'</li>
-  <li>Add all of the .jar files found in the directories and their 'dependencies' subdirectories</li>
+  <li>In Eclipse: 'File > New > Create roject from existing source, Click Browse on location, choose library folder from extracted folder above, and click finish'</li>
+  <li>Right click on ActionBarSherlock > Properties, click Android tab, tick Android 4.0.3 as a Project Build Target</li>
+  <li>tick 'isLibrary' in The Library, Click Apply and OK.</li>
+  <li>Right click on Reddit Google Tasks > Properties, click Android tab, click Add... > Choose ActionBarSherlock > Click OK > Click Apply and OK</li>
   <li>'Project > Clean...'</li>
 </ol>
