@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.joda.time.DateTime;
-
 import com.google.api.client.extensions.android2.AndroidHttp;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.extensions.android2.auth.GoogleAccountManager;
@@ -58,8 +56,8 @@ import com.redditandroiddevelopers.googletasksclient.ClientCredentials;
 
 
 public class GoogleTasksClientActivity extends SherlockActivity {
-	
-	
+
+
 	 /** Logging level for HTTP requests/responses. */
 	  private static final Level LOGGING_LEVEL = Level.OFF;
 
@@ -74,7 +72,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 	  private static final int REQUEST_AUTHENTICATE = 0;
 
 	  final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-	  
+
 	  final JsonFactory jsonFactory = new JacksonFactory();
 
 	  static final String PREF_ACCOUNT_NAME = "accountName";
@@ -90,28 +88,29 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 	  GoogleCredential credential = new GoogleCredential();
 
 	  com.google.api.services.tasks.Tasks service;
-	
+
 	  List<String> taskTitles = new ArrayList<String>();
-	 
+
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
+
        //add menu items to the action bar. look on onOptionsItemSelected to action code.
-		
-        menu.add(0,0,0,"Add New Task"); 
-        menu.add(0,1,0,"Search"); 
-        menu.add(0,2,0,"Settings");    
-        menu.add(0,3,0,"Refresh"); 
-        
+
+        menu.add(0,0,0,"Add New Task");
+        menu.add(0,1,0,"Search");
+        menu.add(0,2,0,"Settings");
+        menu.add(0,3,0,"Refresh");
+
         return true;
     }
-	
-	
+
+
 	//to Download All List and add items to listview.
 	class RetreiveTask extends AsyncTask<String, Void, GoogleTasksClientActivity> {
-	    
+
 	    ListView listView = (ListView) findViewById(R.id.mylist);
-	    protected GoogleTasksClientActivity doInBackground(String... urls) {
+	    @Override
+		protected GoogleTasksClientActivity doInBackground(String... urls) {
 
 		    try {
 		      List<Task> tasks = service.tasks().list("@default").execute().getItems();
@@ -123,32 +122,33 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		      } else {
 		        taskTitles.add("No tasks.");
 		      }
-		     
+
 		    } catch (IOException e) {
 		      handleGoogleException(e);
 		    }
-		    
+
 		    return null;
-			
-			
+
+
 	    }
 
 
+		@Override
 		protected void onPostExecute(GoogleTasksClientActivity feed) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), 
-		    		  R.layout.list_item, 
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(),
+		    		  R.layout.list_item,
 		    		  taskTitles);
 			  listView.setAdapter(adapter);
 	    }
 	 }
 
 
-	
+
 	@Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-		 
-		
+
+
 		switch(item.getItemId())
         {
             case 0:
@@ -156,7 +156,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
                 //Open AddTaskActivity to add new task.
                 Intent myIntent = new Intent(GoogleTasksClientActivity.this, AddTaskActivity.class);
                 GoogleTasksClientActivity.this.startActivity(myIntent);
-    
+
            	return true;
             }
             case 1:
@@ -181,43 +181,44 @@ public class GoogleTasksClientActivity extends SherlockActivity {
             default:
         		return super.onOptionsItemSelected(item);
         }
-    	
+
     }
-	 
+
     /** Called when the activity is first created. */
 	 @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
-       
+
 
         setContentView(R.layout.main);
-     
+
         service = com.google.api.services.tasks.Tasks.builder(transport, jsonFactory)
         .setApplicationName("RedditGoogleTasks/1.0")
         .setHttpRequestInitializer(credential)
         .setJsonHttpRequestInitializer(new JsonHttpRequestInitializer() {
 
-          public void initialize(JsonHttpRequest request) throws IOException {
+          @Override
+		public void initialize(JsonHttpRequest request) throws IOException {
             TasksRequest tasksRequest = (TasksRequest) request;
             tasksRequest.setKey(ClientCredentials.KEY);
-            
+
           }
         })
         .build();
-    	
+
     	  //settings = getPreferences(MODE_PRIVATE);
 
     	  accountName = settings.getString(PREF_ACCOUNT_NAME, null);
             credential.setAccessToken(settings.getString(PREF_AUTH_TOKEN, null));
              Logger.getLogger("com.google.api.client").setLevel(LOGGING_LEVEL);
-           
+
          accountManager = new GoogleAccountManager(getApplicationContext());
          gotAccount();
-      
-        
+
+
     }
 	//Put oauthToken on sharedPreferences
 	  void setAuthToken(String authToken) {
@@ -226,7 +227,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		    editor.commit();
 		    credential.setAccessToken(authToken);
 		  }
-	  
+
 	 void gotAccount() {
 		    Account account = accountManager.getAccountByName(accountName);
 		    if (account == null) {
@@ -241,7 +242,8 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		    accountManager.manager.getAuthToken(
 		        account, AUTH_TOKEN_TYPE, true, new AccountManagerCallback<Bundle>() {
 
-		          public void run(AccountManagerFuture<Bundle> future) {
+		          @Override
+				public void run(AccountManagerFuture<Bundle> future) {
 		            try {
 		              Bundle bundle = future.getResult();
 		              if (bundle.containsKey(AccountManager.KEY_INTENT)) {
@@ -258,7 +260,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		          }
 		        }, null);
 		  }
-	 
+
 	 private void chooseAccount() {
 		    accountManager.manager.getAuthTokenByFeatures(GoogleAccountManager.ACCOUNT_TYPE,
 		        AUTH_TOKEN_TYPE,
@@ -268,7 +270,8 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		        null,
 		        new AccountManagerCallback<Bundle>() {
 
-		          public void run(AccountManagerFuture<Bundle> future) {
+		          @Override
+				public void run(AccountManagerFuture<Bundle> future) {
 		            Bundle bundle;
 		            try {
 		              bundle = future.getResult();
@@ -294,7 +297,7 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		    editor.commit();
 		    this.accountName = accountName;
 		  }
-	
+
 
 
 	  void handleGoogleException(IOException e) {
@@ -313,10 +316,10 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 		    }
 		    Log.e(TAG, e.getMessage(), e);
 		  }
-    
+
 	  //Currently to refresh listView, we need to restart the main activity. this will be temporary fix. ||rheza
 	    public void refresh() {
-	        
+
 	        Intent intent = getIntent();
 	        overridePendingTransition(0, 0);
 	        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -325,6 +328,6 @@ public class GoogleTasksClientActivity extends SherlockActivity {
 	        overridePendingTransition(0, 0);
 	        startActivity(intent);
 	    }
-	    
-	    
+
+
 }
