@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="fill_parent"
+      android:layout_height="60dp"
+      android:orientation="vertical"
+      android:paddingLeft="6dip"
+      android:paddingRight="6dip"
+      android:paddingTop="10dip"
+       android:paddingBottom="10dip"
+      android:weightSum="1" >
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:textColor="#000000"
-    android:text="Sample tasks"
-    android:layout_height="fill_parent"
-    android:padding="10dp"
-    android:textSize="18sp"
-    android:drawableLeft="@drawable/baseicon"
-    android:drawablePadding="10dp" >
-</TextView>
+      <TextView
+          android:id="@+id/titleTask"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentBottom="true"
+	
+          android:paddingBottom="5dp"
+          android:text="Large Text"
+          android:textAppearance="?android:attr/textAppearanceLarge" />
+
+      <TextView
+          android:id="@+id/createdAtText"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignBaseline="@+id/titleTask"
+          android:layout_alignBottom="@+id/titleTask"
+          android:layout_alignParentRight="true"
+          android:text="Small Text"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          android:textColor="#989898" />
+
+  </RelativeLayout>

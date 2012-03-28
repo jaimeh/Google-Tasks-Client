@@ -5,7 +5,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.preference.PreferenceManager;
 
@@ -39,7 +41,7 @@ public class AddTaskActivity extends SherlockActivity{
     /** Logging level for HTTP requests/responses. */
     private static final Level LOGGING_LEVEL = Level.OFF;
 
-    private static final String TAG = "TasksSample";
+    private static final String TAG = "REDDIT GOOGLE TASKS";
 
     // This must be the exact string, and is a special for alias OAuth 2 scope
     // "https://www.googleapis.com/auth/tasks"
@@ -52,13 +54,17 @@ public class AddTaskActivity extends SherlockActivity{
 
     GoogleAccountManager accountManager;
 
-    
+   
 
     String accountName;
 
     GoogleCredential credential = new GoogleCredential();
 
     com.google.api.services.tasks.Tasks service;
+    
+
+    
+    
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +76,7 @@ public class AddTaskActivity extends SherlockActivity{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
        
         setContentView(R.layout.addtask);
+    
         
         service = com.google.api.services.tasks.Tasks.builder(transport, jsonFactory)
         .setApplicationName("RedditGoogleTasks/1.0")
@@ -125,9 +132,7 @@ public class AddTaskActivity extends SherlockActivity{
         {
             case 0:
             {
-            
-          
-             //add task
+     
             new addTask().execute();
              
            
@@ -148,9 +153,12 @@ public class AddTaskActivity extends SherlockActivity{
     //add task module
  class addTask extends AsyncTask<String, Void, AddTaskActivity> {
 
-       
+	 
         
         protected AddTaskActivity doInBackground(String... urls) {
+        	
+
+			 
             final EditText titleText = (EditText) findViewById(R.id.editTitle);
             final EditText noteText = (EditText) findViewById(R.id.editNote);
             
@@ -168,7 +176,8 @@ public class AddTaskActivity extends SherlockActivity{
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            //close addTask Activity
+
+        	
             finish();
             return null;
             

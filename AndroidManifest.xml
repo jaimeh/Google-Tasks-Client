@@ -22,5 +22,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddTaskActivity" android:label="Add new task"> </activity>
+        <activity android:name=".detailTasks"> </activity>
     </application>
 </manifest>

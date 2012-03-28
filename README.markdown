@@ -4,7 +4,6 @@ Google Tasks Client:
 - The Google Tasks Client will be using OAuth, so you'll need to contact a PM for access to the API Key.
 - GTC will be using the Google Tasks API to deal with the transfer of data. Go read up at: https://developers.google.com/google-apps/tasks/
 
-
 ------------------
 
 Maven:
