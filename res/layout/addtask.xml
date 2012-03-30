@@ -5,24 +5,21 @@
     android:orientation="vertical" >
 
     <EditText
+        android:id="@+id/editNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Note" />
+    <EditText
         android:id="@+id/editTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:ems="10"
-        android:hint="Task name"
-        android:inputType="text|textPersonName" >
+        android:hint="Task name" >
 
-        <requestFocus />
+
     </EditText>
-
-    <EditText
-        android:id="@+id/editNote"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:ems="10"
-        android:hint="Note"
-        android:inputType="text|textPersonName" />
 
 </LinearLayout>
